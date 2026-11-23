@@ -1,0 +1,17 @@
+[truth] in-range case u_L=0.45: stretch 1.296..1.715, reaction 0.6962, Newton iters/step [4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+[train] stress RMSE on noisy data = 0.0191  (noise std = 0.02)
+[train] max |P_nn - P_true| inside training range = 0.0116
+[train] learned tangent dP/dlam min over [0.3,4.5] = 0.284 at lam=4.50 (true min = 1.022)
+[nn]    Newton iters/step [4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+[compare in-range] rel. L2 error: displacement 4.57e-03, stress 4.67e-03, reaction 4.67e-03
+[compare in-range, force control F=0.696] rel. L2 displacement error 1.01e-02
+[extrap] u_L=-0.30 max stretch 0.76: min stretch 0.62: reaction true -0.981  nn -0.891  rel err 9.2%
+[extrap] u_L=0.45 max stretch 1.72: min stretch 1.30: reaction true 0.696  nn 0.699  rel err 0.5%
+[extrap] u_L=1.00 max stretch 2.62: min stretch 1.63: reaction true 1.252  nn 1.241  rel err 0.9%
+[extrap] u_L=2.00 max stretch 4.16: min stretch 2.28: reaction true 2.076  nn 1.874  rel err 9.7%
+[extrap] u_L=3.00 max stretch 5.63: min stretch 2.97: reaction true 2.835  nn 1.880  rel err 33.7%
+[extrap force F=2.0] true: converged, max stretch 4.01; NN: FAILED at 100% of the load (F=2.00); last converged F=1.90 with max stretch 6.21 (true law at that F: 3.82); last residuals ['5.3e-02', '3.3e-02', '7.0e-02']
+[extrap] learned stress at lam=10: 3.838 (true 9.990); as lam->inf P_nn -> 3.703 (softplus MLP becomes linear, so W ~ c*lam and P saturates). 
+[extrap] learned P peaks at 3.838 (lam=9.6) -> the NN bar can never carry more than A_min*P_max = 1.943, so F=2.0 has NO equilibrium solution
+[extrap] learned tangent dP/dlam < 0 (W non-convex, spurious softening) for lam in [9.6, 50.0]; compression: P_nn(0.05)=-4.63 vs true -400
+wrote results.png, metrics.json
