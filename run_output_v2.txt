@@ -1,0 +1,27 @@
+  Neo-Hookean (true)     plain MLP    seed 0: rmse 0.0191  in-range u err 4.57e-03  F=2.08 FAILED  min dP -0.007
+  Neo-Hookean (true)     plain MLP    seed 1: rmse 0.0191  in-range u err 5.01e-03  F=2.08 FAILED  min dP 0.000
+  Neo-Hookean (true)     plain MLP    seed 2: rmse 0.0191  in-range u err 4.38e-03  F=2.08 FAILED  min dP 0.000
+  Neo-Hookean (true)     plain MLP    seed 3: rmse 0.0191  in-range u err 4.68e-03  F=2.08 FAILED  min dP -0.002
+  Neo-Hookean (true)     plain MLP    seed 4: rmse 0.0191  in-range u err 5.27e-03  F=2.08 FAILED  min dP 0.000
+  Neo-Hookean (true)     convex ICNN  seed 0: rmse 0.0191  in-range u err 4.98e-03  F=2.08 ok  min dP 1.323
+  Neo-Hookean (true)     convex ICNN  seed 1: rmse 0.0195  in-range u err 3.91e-03  F=2.08 ok  min dP 0.920
+  Neo-Hookean (true)     convex ICNN  seed 2: rmse 0.0194  in-range u err 3.70e-03  F=2.08 ok  min dP 1.153
+  Neo-Hookean (true)     convex ICNN  seed 3: rmse 0.0194  in-range u err 3.78e-03  F=2.08 ok  min dP 1.204
+  Neo-Hookean (true)     convex ICNN  seed 4: rmse 0.0195  in-range u err 3.91e-03  F=2.08 ok  min dP 1.015
+  Ogden alpha=4 (true)   plain MLP    seed 0: rmse 0.0189  in-range u err 1.86e-03  F=9.85 FAILED  min dP -0.000
+  Ogden alpha=4 (true)   plain MLP    seed 1: rmse 0.0198  in-range u err 8.66e-04  F=9.85 FAILED  min dP -0.004
+  Ogden alpha=4 (true)   plain MLP    seed 2: rmse 0.0190  in-range u err 2.03e-03  F=9.85 ok  min dP -0.019
+  Ogden alpha=4 (true)   plain MLP    seed 3: rmse 0.0192  in-range u err 1.59e-03  F=9.85 ok  min dP 0.001
+  Ogden alpha=4 (true)   plain MLP    seed 4: rmse 0.0189  in-range u err 1.72e-03  F=9.85 FAILED  min dP -0.027
+  Ogden alpha=4 (true)   convex ICNN  seed 0: rmse 0.0190  in-range u err 2.08e-03  F=9.85 ok  min dP 2.890
+  Ogden alpha=4 (true)   convex ICNN  seed 1: rmse 0.0191  in-range u err 2.22e-03  F=9.85 ok  min dP 2.894
+  Ogden alpha=4 (true)   convex ICNN  seed 2: rmse 0.0190  in-range u err 2.16e-03  F=9.85 ok  min dP 2.892
+  Ogden alpha=4 (true)   convex ICNN  seed 3: rmse 0.0192  in-range u err 1.49e-03  F=9.85 ok  min dP 2.878
+  Ogden alpha=4 (true)   convex ICNN  seed 4: rmse 0.0190  in-range u err 2.10e-03  F=9.85 ok  min dP 2.891
+
+case                                 in-range u   R@uL=2   R@uL=3  spread@3 F-ctrl  tip err  min dP         P(0.1)
+Neo-Hookean (true) | plain MLP         4.78e-03    12.3%    33.5%      2.2%    0/5     nan%  -0.007   -5.2 (-100)
+Neo-Hookean (true) | convex ICNN       4.06e-03     7.4%    33.7%     30.3%    5/5     7.3%   0.920 -132.7 (-100)
+Ogden alpha=4 (true) | plain MLP       1.61e-03    28.8%    62.9%     11.2%    2/5    21.8%  -0.027   -4.8 (-500)
+Ogden alpha=4 (true) | convex ICNN     2.01e-03     7.0%    22.5%      6.9%    5/5     4.0%   2.878 -237.5 (-500)
+wrote results_v2.png, metrics_v2.json

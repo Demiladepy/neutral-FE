@@ -46,13 +46,38 @@ Newton–Raphson FE solver? And what happens when the structure is loaded beyond
 and an exact, consistent tangent. Its real value shows up in 3D, where it guarantees a symmetric tangent, thermodynamic
 consistency and (with invariant inputs) objectivity and isotropy.
 
+## Part 2: does building in the physics fix it? (`python compare_models.py`, ~3 min)
+Next-step 1 is now implemented as `ConvexEnergyNet`, an input-convex NN on the features [λ², 1/λ] plus a sign-free λ term.
+Every weight on those features or on a hidden layer is kept ≥ 0. As a result W is **convex in λ** and **W → ∞ as λ → 0** by construction.
+To avoid a rigged test, it also runs on **Ogden α=4** data (P ~ λ³), which is *not* in the span of the features.
+Each model is a 5-seed ensemble, and the bar and load cases are the same as before.
+
+![results v2](results_v2.png)
+
+| truth / model | in-range u err | R err @ λ_max≈4 / 5.6 | seed spread @ 5.6 | force control F(u_L=2) | min ∂P/∂λ | P(0.1) (true) |
+|---|---|---|---|---|---|---|
+| Neo-Hookean / plain MLP | 0.48 % | 12 % / 34 % (too soft) | 2 % | **0/5 converge** | −0.007 | −5 (−100) |
+| Neo-Hookean / convex ICNN | 0.41 % | 7 % / 34 % (too stiff) | 30 % | 5/5, tip err 7 % | +0.92 | −133 (−100) |
+| Ogden α=4 / plain MLP | 0.16 % | 29 % / 63 % | 11 % | 2/5, tip err 22 % | −0.027 | −5 (−500) |
+| Ogden α=4 / convex ICNN | 0.20 % | 7 % / 23 % | 7 % | 5/5, tip err 4 % | +2.88 | −238 (−500) |
+
+* **The constraints fixed the qualitative failures.** No negative tangent anywhere, so no spurious necking. Force control always finds a solution.
+  Compression resistance is now the right order of magnitude. In range, both models are equally good (0.2–0.5 %).
+* **They did not fix the quantitative extrapolation.** On Neo-Hookean the ICNN errs by the same 34 % as the plain MLP, just too stiff instead of too soft.
+  Convexity fixes the *shape* of the energy, not how stiff the material is beyond the data. Only more data, or a better-informed functional form, can supply that.
+* **Seed spread is a partial warning, not a calibrated error bar.** The plain MLP on Neo-Hookean is the dangerous case.
+  All 5 seeds agree (2 % spread) on an answer that is 34 % wrong, because the saturation comes from the architecture and is not random.
+  For the ICNN, spread roughly tracks error on Neo-Hookean but underestimates it 3× on Ogden.
+  So a "stretch outside training range" flag in the solver is more trustworthy than the ensemble.
+
 ## What I'd try next
-1. **Bake in the constraints that failed:** an input-convex NN (non-negative weights, convex activations) for convexity in λ,
-   plus a growth term (e.g. a −log λ feature) so W → ∞ as λ → 0.
+1. ~~Bake in convexity + growth~~ (done, Part 2). Next: let the ICNN learn its *asymptotic growth rate*, e.g. power-law features λ^k with learned k,
+   and test on a limited-extensibility law (Gent), where every smooth extrapolation fails.
 2. **Invariant inputs** (I₁ = λ²+2/λ, as in constitutive ANNs, e.g. Linka & Kuhl). Caveat: Neo-Hookean is linear in I₁, so this
    would extrapolate almost perfectly. That's partly bias by construction, so test it on Ogden/Gent data.
-3. **Richer data** instead of only a wider range: biaxial and shear modes in 3D. Add **uncertainty** (ensembles/Bayesian last layer) so the solver
-   can flag elements whose stretch leaves the training range.
+3. **Richer data** instead of only a wider range: biaxial and shear modes in 3D. Make the solver report, per element, when its stretch leaves
+   the training range. Part 2 shows that ensemble spread alone isn't a reliable enough flag.
 4. Move to 3D and a real FE code (FEniCS), with W(I₁, I₂, J) and a mesh-convergence study of the localisation.
 
-Files: `fe_solver.py` (FE + Newton), `materials.py` (Neo-Hookean, EnergyNet), `run_demo.py` (everything above, about 15 s on CPU), `seed_study.py`.
+Files: `fe_solver.py` (FE + Newton), `materials.py` (Neo-Hookean, Ogden, EnergyNet, ConvexEnergyNet), `train.py`, `run_demo.py` (Part 1, about 15 s),
+`compare_models.py` (Part 2), `seed_study.py`. Install: `pip install -r requirements.txt`.
